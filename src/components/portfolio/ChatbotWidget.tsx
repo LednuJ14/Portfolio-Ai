@@ -31,9 +31,9 @@ export const ChatbotWidget = () => {
 
   const FLOWISE_RUN_URL = import.meta.env?.VITE_FLOWISE_RUN_URL || '';
   const FLOWISE_API_KEY = import.meta.env?.VITE_FLOWISE_API_KEY || '';
-  const FLOWISE_API_HOST = import.meta.env?.VITE_FLOWISE_API_HOST || '';
-  const FLOWISE_CHATFLOW_ID = import.meta.env?.VITE_FLOWISE_CHATFLOW_ID || '';
-  const FLOWISE_URL = FLOWISE_RUN_URL || (FLOWISE_API_HOST && FLOWISE_CHATFLOW_ID ? `${FLOWISE_API_HOST}/api/v1/prediction/${FLOWISE_CHATFLOW_ID}` : '');
+  const isDev = import.meta.env?.DEV;
+  const USE_DIRECT_FLOWISE = Boolean(isDev && FLOWISE_RUN_URL);
+  const CHAT_API_URL = USE_DIRECT_FLOWISE ? FLOWISE_RUN_URL : '/api/chat';
 
   const scrollToBottom = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
@@ -84,16 +84,13 @@ export const ChatbotWidget = () => {
 
     try {
       const sid = await ensureSession();
-      if (!FLOWISE_URL) {
-        throw new Error('Flowise run URL is not configured');
-      }
       const headers: Record<string, string> = {
         'Content-Type': 'application/json'
       };
-      if (FLOWISE_API_KEY) {
+      if (USE_DIRECT_FLOWISE && FLOWISE_API_KEY) {
         headers['Authorization'] = `Bearer ${FLOWISE_API_KEY}`;
       }
-      const res = await fetch(FLOWISE_URL, {
+      const res = await fetch(CHAT_API_URL, {
         method: 'POST',
         headers,
         body: JSON.stringify({

@@ -37,13 +37,24 @@ export default async function handler(req: RequestLike, res: ResponseLike) {
   const headers: Record<string, string> = { "Content-Type": "application/json" };
   if (key) headers["Authorization"] = `Bearer ${key}`;
   const payload = typeof req.body === "object" && req.body ? req.body : {};
-  const response = await fetch(url, {
-    method: "POST",
-    headers,
-    body: JSON.stringify(payload),
-  });
-  const text = await response.text();
-  res.setHeader("Access-Control-Allow-Origin", "*");
-  res.setHeader("Content-Type", "application/json");
-  res.status(response.status).send(text);
+  try {
+    console.log("[chat] forwarding request", {
+      hasHost: Boolean(host),
+      hasId: Boolean(id),
+      hasKey: Boolean(key),
+    });
+    const response = await fetch(url, {
+      method: "POST",
+      headers,
+      body: JSON.stringify(payload),
+    });
+    const text = await response.text();
+    res.setHeader("Access-Control-Allow-Origin", "*");
+    res.setHeader("Content-Type", "application/json");
+    res.status(response.status).send(text);
+  } catch (error) {
+    console.error("[chat] error forwarding to Flowise", error);
+    res.setHeader("Access-Control-Allow-Origin", "*");
+    res.status(500).json({ error: "Chat proxy error" });
+  }
 }
