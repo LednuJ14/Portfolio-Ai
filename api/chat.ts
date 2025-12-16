@@ -42,5 +42,6 @@ export default async function handler(req: RequestLike, res: ResponseLike) {
   });
   const text = await response.text();
   res.setHeader("Access-Control-Allow-Origin", "*");
-  res.status(response.status).type("application/json").send(text);
+  res.setHeader("Content-Type", "application/json");
+  res.status(response.status).send(text);
 }
