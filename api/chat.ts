@@ -26,11 +26,26 @@ export default async function handler(req: RequestLike, res: ResponseLike) {
     res.status(405).json({ error: "Method not allowed" });
     return;
   }
-  const host = process.env.FLOWISE_API_HOST;
-  const id = process.env.FLOWISE_CHATFLOW_ID;
-  const key = process.env.FLOWISE_API_KEY;
+  const host =
+    process.env.FLOWISE_API_HOST ||
+    process.env.VITE_FLOWISE_API_HOST ||
+    "";
+  const id =
+    process.env.FLOWISE_CHATFLOW_ID ||
+    process.env.CHATFLOW_ID ||
+    process.env.VITE_FLOWISE_CHATFLOW_ID ||
+    "";
+  const key =
+    process.env.FLOWISE_API_KEY ||
+    process.env.VITE_FLOWISE_API_KEY ||
+    "";
+
   if (!host || !id) {
-    res.status(500).json({ error: "Proxy not configured" });
+    res.status(500).json({
+      error: "Proxy not configured",
+      hasHost: Boolean(host),
+      hasId: Boolean(id),
+    });
     return;
   }
   const url = `${host}/api/v1/prediction/${id}`;
