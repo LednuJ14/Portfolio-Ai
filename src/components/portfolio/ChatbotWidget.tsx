@@ -143,10 +143,14 @@ export const ChatbotWidget = () => {
       };
       setMessages((prev) => [...prev, botMessage]);
     } catch (err: unknown) {
-      setError('Chat service temporarily unavailable. Please try again.');
+      let message = 'Chat service temporarily unavailable. Please try again.';
+      if (err && typeof err === 'object' && 'message' in err && typeof (err as { message?: unknown }).message === 'string') {
+        message = (err as { message: string }).message || message;
+      }
+      setError(message);
       const botMessage: Message = {
         id: userMessage.id + 1,
-        text: 'Chat service temporarily unavailable. Please try again.',
+        text: message,
         sender: 'bot',
         timestamp: new Date(),
       };
