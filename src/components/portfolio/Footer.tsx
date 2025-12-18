@@ -61,7 +61,7 @@ export const Footer = () => {
         {/* Bottom Bar */}
         <div className="flex flex-col sm:flex-row justify-between items-center gap-4 text-sm text-muted-foreground">
           <p className="flex items-center gap-1">
-            © {currentYear} Jun-Del Patuasic. Made with <Heart className="h-4 w-4 text-destructive fill-destructive" />
+            © {currentYear} Jun-Del Patuasic.
           </p>
           <div className="flex gap-6">
             <a href="#" className="hover:text-primary transition-colors">Privacy Policy</a>

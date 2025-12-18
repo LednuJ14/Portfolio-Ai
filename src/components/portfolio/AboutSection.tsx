@@ -68,7 +68,7 @@ export const AboutSection = () => {
           <div className="space-y-8 animate-fade-up animation-delay-300">
             <div className="space-y-6">
               <h3 className="font-display text-2xl font-semibold text-foreground">
-                Profile – Jun-Del Patuasic
+                Profile
               </h3>
               <div className="space-y-4 text-muted-foreground leading-relaxed">
                 <p>
