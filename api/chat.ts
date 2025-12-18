@@ -27,7 +27,7 @@ export default async function handler(req: RequestLike, res: ResponseLike) {
     return;
   }
   const host = process.env.FLOWISE_API_HOST;
-  const id = process.env.CHATFLOW_ID;
+  const id = process.env.FLOWISE_CHATFLOW_ID;
   const key = process.env.FLOWISE_API_KEY;
   if (!host || !id) {
     res.status(500).json({ error: "Proxy not configured" });
